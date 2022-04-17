@@ -120,26 +120,47 @@ form.example::after {
 <form method="post" action="">
   <h1>SEARCH FOR MOVIE TITLES</h1>
   <input type="text" name="search" required/>
-  <input type="submit" value="Search"/>
+  <input type="submit" value="search"/>
 </form>
 
 <?php
 // (B) PROCESS SEARCH WHEN FORM SUBMITTED
+if (isset($_POST["add"])){
+  echo $_POST["addMovie"];
+}
 if (isset($_POST["search"])) {
   $json=file_get_contents("https://imdb-api.com/en/API/SearchMovie/k_u83w1u0o/" . $_POST["search"] . "");
   $json = json_decode($json,true);
   $i = 0;
 
+  ?>
+
+  <form method="post" action="">
+  <table border='1' padding-top='50px'>
+        <tr>
+        <th>Picture</th> 
+        <th>Title</th>
+        <th>Year</th>
+        <th>Add to favorites</th>
+        </tr>
+
+        <?php
   while ($i < count($json)){
+    echo "<tr>";
     if ($i === 0 || ($i % 2 == 0)){
-        echo "<img width='50' src=" . $json['results'][$i]['image'] . ">";
-        echo "title: " . $json['results'][$i]['title'];
-        echo "(" . $json['results'][$i]['description'] . ")";
-        echo "<br>";
-        echo "<br>";
+        
+        echo "<td width='200'>" . "<img width='50' src=" . $json['results'][$i]['image'] . ">". "</td>";
+        echo "<td width='200'>" . $json['results'][$i]['title']. "</td>";
+        echo "<td width='200'>" . $json['results'][$i]['description'] . "</td>";
+        //$json['results'][$i]['id']
+        echo "<td width='200'>  <input type='submit' name='add' value='add'> <input type='hidden' id='addMovie' name='addMovie' value=" . $json['results'][$i]['id'] . "> </td>";
     }
     $i++;
   }
+    ?>
+    </table>
+  </form>
+<?php  
 }
 ?>
 </section>
