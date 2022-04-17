@@ -93,7 +93,7 @@ form.example::after {
   <a href="movie.php">Movies</a>
   <a href="#">Genres</a>
   <a href="#">Actors</a>
-  <a href="#">My Account</a>
+  <a href="account.html">My Account</a>
   <a href="#">My Favorites</a>
 </div>
 <!-- Navigation 
