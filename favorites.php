@@ -110,71 +110,137 @@ form.example::after {
   <p class="w3-justify">My Movie List is an all-in-one, cross-platform service for tracking the movies you’ve watched, enjoyed, and wish to know more about.
 </p>
 </section>
-
-
-<!--Search field-->
 <section class="w3-container w3-center w3-content" style="max-width:600px">
-<!-- (A) SEARCH FORM -->
-<form method="post" action="">
-  <h1>SEARCH FOR MOVIE TITLES</h1>
-  <input type="text" name="search" required/>
-  <input type="submit" value="search"/>
-</form>
-
 <?php
 // (B) PROCESS SEARCH WHEN FORM SUBMITTED
-if (isset($_POST["add"])){
-  
-  $user = "jpeter37";
-  $entry = $user . "," . $_POST["addMovie"] . PHP_EOL; 
-  
-  $file = fopen("favorites.txt","a+") or die("no file available");
-  if (flock($file, LOCK_EX)) {
-      fwrite($file, $entry);
-      flock($file, LOCK_UN);
-      fclose($file);
-  }
-  echo "Movie succesfully added to favorites";
 
+if (isset($_GET['delete'])){
+  $delete = $_GET['delete'];
 }
-if (isset($_POST["search"])) {
-  $json=file_get_contents("https://imdb-api.com/en/API/SearchMovie/k_u83w1u0o/" . $_POST["search"] . "");
-  $json = json_decode($json,true);
-  $i = 0;
+else{
+  $delete = "";
+}
+$file_name = "favorites.txt";
+$size = filesize($file_name);
+$textFile = file($file_name);
+$lines = count($textFile);
+if($size == "0")
+{
+echo "Nothing to display, Seems like file is empty. Try adding some data to it!!!";
+exit;
+}
+if($delete != "" && $delete >! $lines || $delete === '0') {
+    $textFile[$delete] = "";
+    $fileUpdate = fopen($file_name, "wb");
+    for($a=0; $a< $lines; $a++) {
+           fwrite($fileUpdate, $textFile[$a]);
+    }
+    fclose($fileUpdate);
+   header("Location:favorites.php");
+   exit;
+}
 
-  ?>
+?>
+<form method="post" action="">
 
-  <form method="post" action="">
-  <table border='1' padding-top='50px'>
+<table border='1' padding-top='50px'>
         <tr>
           <th>Picture</th> 
           <th>Title</th>
           <th>Year</th>
           <th>Add to favorites</th>
         </tr>
+<?php
+ 
+foreach($textFile as $key => $val) {
+  $movie = explode(",", $val);
 
-        <?php
-  while ($i < count($json)){
-    echo "<tr>";
-    if ($i === 0 || ($i % 2 == 0)){
-        echo "<td width='200'>  height='100'" . "<img width='50' src=" . $json['results'][$i]['image'] . ">". "</td>";
-        echo "<td width='200'>  height='100'" . $json['results'][$i]['title']. "</td>";
-        echo "<td width='200'>  height='100'" . $json['results'][$i]['description'] . "</td>";
-        //$json['results'][$i]['id']
-        echo "<td width='200'  height='100'>  <input type='submit' name='add' value='add'> <input type='hidden' id='addMovie' name='addMovie' value=" . $json['results'][$i]['id'] . "> </td>";
-    }
-    $i++;
-  }
-    ?>
-    </table>
-  </form>
-<?php  
+  $curl = curl_init();
+
+  $link = trim("https://imdb-api.com/en/API/Title/k_u83w1u0o/". $movie[1]. "");
+
+  curl_setopt_array($curl, array(
+    CURLOPT_URL => $link,
+    CURLOPT_RETURNTRANSFER => true,
+    CURLOPT_ENCODING => "",
+    CURLOPT_MAXREDIRS => 10,
+    CURLOPT_TIMEOUT => 0,
+    CURLOPT_FOLLOWLOCATION => true,
+    CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+    CURLOPT_CUSTOMREQUEST => "GET",
+  ));
+  
+  $response = curl_exec($curl);
+  
+  curl_close($curl);
+  //echo $response;
+
+  $response_json = json_decode($response, true);
+
+  $image = $response_json['image'];
+  $title = $response_json['title'];
+  $year = $response_json['year'];
+
+
+  echo "<tr>";
+  $line = @$line .  "<td width='200' height='100'>" . "<img width='50' src=" . $image . ">" . "</td>" .
+                    "<td width='200' height='100'>" . $title . "</td>" .
+                    "<td width='200' height='100'>" . $year . "</td>" . 
+                    "<td width='200' height='100'>" . "<a href =?delete=$key> Delete </a><br />" . "</td></tr>";
 }
+
+echo $line;
+echo "</table>";
+
+
+//$file = file("favorites.txt");
+
+
+
+/*
+foreach($line as $file){
+  $movie = explode(",", $file);
+
+  $movie = explode(",", $line);
+  $curl = curl_init();
+
+  $link = trim("https://imdb-api.com/en/API/Title/k_u83w1u0o/". $movie[1]. "");
+
+  curl_setopt_array($curl, array(
+    CURLOPT_URL => $link,
+    CURLOPT_RETURNTRANSFER => true,
+    CURLOPT_ENCODING => "",
+    CURLOPT_MAXREDIRS => 10,
+    CURLOPT_TIMEOUT => 0,
+    CURLOPT_FOLLOWLOCATION => true,
+    CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+    CURLOPT_CUSTOMREQUEST => "GET",
+  ));
+  
+  $response = curl_exec($curl);
+  
+  curl_close($curl);
+  //echo $response;
+
+  $response_json = json_decode($response, true);
+  echo "<tr>";
+  echo "<td width='200'>" . "<img width='50' src=" . $response_json['image'] . ">". "</td>";
+  echo "<td width='200'>" . $response_json['title']. "</td>";
+  echo "<td width='200'>" . $response_json['year'] . "</td>";
+  echo "<td width='200'>  <input type='submit' name='remove' value='remove'> <input type='hidden' id='removeMovie' name='removeMovie' value=''> </td>";
+  echo "</tr>";
+*/
+    ?>
+  
+  </form>
+
+  <?php
+//}
 ?>
 </section>
 <!--Footer-->
 
-<footer class="w3-container w3-padding-64 w3-center w3-blue w3-xlarge">
+<footer   height: 50px; margin-top: -50px;class="w3-container w3-padding-64 w3-center w3-blue w3-xlarge">
 <p> Team 2: My Movie List </p>
 </footer>
 </body>
