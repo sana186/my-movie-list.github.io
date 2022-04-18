@@ -91,7 +91,7 @@ form.example::after {
 <div class="sidenav">
   <a href="index.html">Home</a>
   <a href="movie.php">Movies</a>
-  <a href="account.html">My Account</a>
+  <a href="signup.html">My Account</a>
   <a href="#">My Favorites</a>
 </div>
 <!-- Navigation 
