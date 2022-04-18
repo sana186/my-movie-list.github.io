@@ -89,9 +89,9 @@ form.example::after {
 <div class="main">
 <body style="background-image: linear-gradient(#99d3f0, #318ebd)">
 <div class="sidenav">
-  <a href="index.html">Home</a>
+<a href="index.html">Home</a>
   <a href="movie.php">Movies</a>
-  <a href="account.html">My Account</a>
+  <a href="signup.html">My Account</a>
   <a href="favorites.php">My Favorites</a>
 </div>
 <!-- Navigation 
