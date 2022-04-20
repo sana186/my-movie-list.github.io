@@ -123,6 +123,9 @@ form.example::after {
 
 <?php
 // (B) PROCESS SEARCH WHEN FORM SUBMITTED
+// NOTE: API keys for IMDb allow 100 free requests per day - if maximum is reached, switch to another API key.
+// Josef - k_u83w1u0o
+// Connor - k_1nw7v1rh
 if (isset($_POST["add"])){
   
 
@@ -149,7 +152,7 @@ if (isset($_POST["add"])){
 
 }
 if (isset($_POST["search"])) {
-  $json=file_get_contents("https://imdb-api.com/en/API/SearchTitle/k_u83w1u0o/" . 
+  $json=file_get_contents("https://imdb-api.com/en/API/SearchTitle/k_1nw7v1rh/" . 
                           $_POST["search"] . "");
   $json = json_decode($json,true);
   $i = 0;

@@ -113,6 +113,9 @@ form.example::after {
 <section class="w3-container w3-center w3-content" style="max-width:600px">
 <?php
 // (B) PROCESS SEARCH WHEN FORM SUBMITTED
+// NOTE: API keys for IMDb allow 100 free requests per day - if maximum is reached, switch to another API key.
+// Josef - k_u83w1u0o
+// Connor - k_1nw7v1rh
 
 if (isset($_GET['delete'])){
   $delete = $_GET['delete'];
@@ -157,7 +160,7 @@ foreach($textFile as $key => $val) {
 
   $curl = curl_init();
 
-  $link = trim("https://imdb-api.com/en/API/Title/k_u83w1u0o/". $movie[1]. "");
+  $link = trim("https://imdb-api.com/en/API/Title/k_1nw7v1rh/". $movie[1]. "");
 
   curl_setopt_array($curl, array(
     CURLOPT_URL => $link,
