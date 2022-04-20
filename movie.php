@@ -125,26 +125,38 @@ form.example::after {
 // (B) PROCESS SEARCH WHEN FORM SUBMITTED
 if (isset($_POST["add"])){
   
+
   $user = "jpeter37";
   $entry = $user . "," . $_POST["addMovie"] . PHP_EOL; 
-  
+  $search_entry = $user . "," . $_POST["addMovie"];
+  $movieName = $_POST["movieName"];
+
+  if (exec('cat favorites.txt | grep '.escapeshellarg($search_entry))) {
+    echo 'Movie already found in favorites!';
+  }
+
+  else {
   $file = fopen("favorites.txt","a+") or die("no file available");
   if (flock($file, LOCK_EX)) {
       fwrite($file, $entry);
       flock($file, LOCK_UN);
       fclose($file);
   }
-  echo "Movie succesfully added to favorites";
+  echo "<br />";
+  echo $movieName . " succesfully added to favorites <br />";
+  echo "<br />";
+  }
 
 }
 if (isset($_POST["search"])) {
-  $json=file_get_contents("https://imdb-api.com/en/API/SearchMovie/k_u83w1u0o/" . $_POST["search"] . "");
+  $json=file_get_contents("https://imdb-api.com/en/API/SearchTitle/k_u83w1u0o/" . 
+                          $_POST["search"] . "");
   $json = json_decode($json,true);
   $i = 0;
 
   ?>
 
-  <form method="post" action="">
+ 
   <table border='1' padding-top='50px'>
         <tr>
           <th>Picture</th> 
@@ -155,19 +167,21 @@ if (isset($_POST["search"])) {
 
         <?php
   while ($i < count($json)){
-    echo "<tr>";
+    
+    
     if ($i === 0 || ($i % 2 == 0)){
-        echo "<td width='200'>  height='100'" . "<img width='50' src=" . $json['results'][$i]['image'] . ">". "</td>";
-        echo "<td width='200'>  height='100'" . $json['results'][$i]['title']. "</td>";
-        echo "<td width='200'>  height='100'" . $json['results'][$i]['description'] . "</td>";
-        //$json['results'][$i]['id']
-        echo "<td width='200'  height='100'>  <input type='submit' name='add' value='add'> <input type='hidden' id='addMovie' name='addMovie' value=" . $json['results'][$i]['id'] . "> </td>";
+        echo "<tr>";
+        echo "<td width='200' height='100'>  " . "<img width='50' src=" . $json['results'][$i]['image'] . ">". "</td>";
+        echo "<td width='200' height='100'>  " . $json['results'][$i]['title']. "</td>";
+        echo "<td width='200' height='100'>  " . $json['results'][$i]['description'] . "</td>";
+        echo "<td width='200' height='100'> <form method='post' action=''>  <input type='submit' name='add' value='add'> </td> <input type='hidden' id='movieName' name='movieName' value=" . $json['results'][$i]['title'] . "> <input type='hidden' id='addMovie' name='addMovie' value=" . $json['results'][$i]['id'] . "></form>" . "</td>";
+        echo "<tr>";
     }
     $i++;
   }
     ?>
     </table>
-  </form>
+  
 <?php  
 }
 ?>
@@ -178,33 +192,4 @@ if (isset($_POST["search"])) {
 <p> Team 2: My Movie List </p>
 </footer>
 </body>
-
 </html>
-<!--<section class="slideshow-container">
-
-<section class="images fade">
-  <section class="numbertext">1 / 3</div>
-  <img src="lostcity.jpg" style="width:50%">
-  <section class="text">The Lost City</div>
-</section>
-
-<section class="images fade">
-  <section class="numbertext">2 / 3</div>
-  <img src="batman.jpg" style="width:50%">
-  <section class="text">The Batman</div>
-</section>
-
-<section class="images fade">
-  <section class="numbertext">3 / 3</div>
-  <img src="uncharted.jpg" style="width:50%">
-  <section class="text">Uncharted</div>
-</section>
-
-</section>
-<br>
-
-<div style="text-align:center">
-  <span class="dot"></span> 
-  <span class="dot"></span> 
-  <span class="dot"></span> 
-</div> -->
