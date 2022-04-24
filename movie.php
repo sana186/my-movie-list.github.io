@@ -142,6 +142,7 @@ if (isset($_POST["add"])){
       fwrite($file, $json);
       flock($file, LOCK_UN);
       fclose($file);
+      chmod($file, 0777);
   }
   }
 
@@ -159,6 +160,7 @@ if (isset($_POST["add"])){
       fwrite($file, $entry);
       flock($file, LOCK_UN);
       fclose($file);
+      chmod($file, 0777);
   }
   echo "<br />";
   echo $movieName . " succesfully added to favorites <br />";
