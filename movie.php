@@ -94,15 +94,6 @@ form.example::after {
   <a href="signup.html">My Account</a>
   <a href="favorites.php">My Favorites</a>
 </div>
-<!-- Navigation 
-<nav class="w3-bar w3-light-blue">
-  <a href="#home" class="w3-button w3-bar-item">Home</a>
-  <a href="#band" class="w3-button w3-bar-item">Movies</a>
-  <a href="#tour" class="w3-button w3-bar-item">Genres</a>
-  <a href="#contact" class="w3-button w3-bar-item">Actors</a>
-  <a href="#contact" class="w3-button w3-bar-item">My Account</a>
-  <a href="#contact" class="w3-button w3-bar-item">My Favorites</a>
-</nav>-->
 
 <!-- Website Description -->
 <section class="w3-container w3-center w3-content" style="max-width:600px">
@@ -133,6 +124,30 @@ if (isset($_POST["add"])){
   $entry = $user . "," . $_POST["addMovie"] . PHP_EOL; 
   $search_entry = $user . "," . $_POST["addMovie"];
   $movieName = $_POST["movieName"];
+  $movieImage = $_POST["movieImage"];
+  $movieDescription = $_POST["movieDescription"];
+
+  $array = array($_POST["addMovie"] => array("Title" => $movieName, "Image" => $movieImage, "Description" => $movieDescription));
+  $json = json_encode($array);
+
+  if (!file_exists('cache.json')) {
+    touch('cache.json');
+  }
+
+  if (exec('cat cache.json | grep '.escapeshellarg($search_entry))) {
+  }
+  else {
+  $file = fopen("cache.json","a+") or die("no file available");
+  if (flock($file, LOCK_EX)) {
+      fwrite($file, $json);
+      flock($file, LOCK_UN);
+      fclose($file);
+  }
+  }
+
+  if (!file_exists('favorites.txt')) {
+    touch('favorites.txt');
+  }
 
   if (exec('cat favorites.txt | grep '.escapeshellarg($search_entry))) {
     echo 'Movie already found in favorites!';
@@ -152,8 +167,9 @@ if (isset($_POST["add"])){
 
 }
 if (isset($_POST["search"])) {
-  $json=file_get_contents("https://imdb-api.com/en/API/SearchTitle/k_1nw7v1rh/" . 
-                          $_POST["search"] . "");
+
+  $searchString = str_replace(" ", "%20" ,$_POST["search"]); 
+  $json=file_get_contents("https://imdb-api.com/en/API/SearchTitle/k_u83w1u0o/" . $searchString . "");
   $json = json_decode($json,true);
   $i = 0;
 
@@ -177,7 +193,11 @@ if (isset($_POST["search"])) {
         echo "<td width='200' height='100'>  " . "<img width='50' src=" . $json['results'][$i]['image'] . ">". "</td>";
         echo "<td width='200' height='100'>  " . $json['results'][$i]['title']. "</td>";
         echo "<td width='200' height='100'>  " . $json['results'][$i]['description'] . "</td>";
-        echo "<td width='200' height='100'> <form method='post' action=''>  <input type='submit' name='add' value='add'> </td> <input type='hidden' id='movieName' name='movieName' value=" . $json['results'][$i]['title'] . "> <input type='hidden' id='addMovie' name='addMovie' value=" . $json['results'][$i]['id'] . "></form>" . "</td>";
+        echo "<td width='200' height='100'> <form method='post' action=''>  <input type='submit' name='add' value='add'>
+                                                                      </td> <input type='hidden' id='movieName' name='movieName' value=" . $json['results'][$i]['title'] . ">
+                                                                            <input type='hidden' id='movieDescription' name='movieDescription' value=" . $json['results'][$i]['description'] . ">
+                                                                            <input type='hidden' id='movieImage' name='movieImage' value=" . $json['results'][$i]['image'] . ">
+                                                                            <input type='hidden' id='addMovie' name='addMovie' value=" . $json['results'][$i]['id'] . "></form></td>";
         echo "<tr>";
     }
     $i++;
