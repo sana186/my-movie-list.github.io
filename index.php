@@ -4,6 +4,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css">
+<?php session_start() ?>
 </head>
 <style>
 body {
@@ -52,6 +53,7 @@ font-size: medium;
   <a href="movie.php">Movies</a>
   <a href="signup.html">My Account</a>
   <a href="favorites.php">My Favorites</a>
+  <a href="signout.php">Logout</a>
 </div>
 <!-- Navigation 
 <nav class="w3-bar w3-light-blue">
@@ -70,6 +72,15 @@ font-size: medium;
 </p>
 <p class="w3-opacity"><i>Trending Movies</i></p>
 </section>
+
+<?php
+
+session_start();
+if(isset($_GET['user'])){
+  $_SESSION['user']=$_GET['user'];
+}
+
+?>
 
 <!--Image Carousel -->
 <section class="w3-container w3-center w3-content" style="max-width:600px" style="max-height:200px">

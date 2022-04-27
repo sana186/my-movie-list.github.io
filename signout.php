@@ -1,11 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<head> 
+<head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sign in</title>
+    <title>Create an Account</title>
     <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css">
 
@@ -55,10 +54,8 @@
     }
 
     </style>
-    
 </head>
 <body style="background-image: linear-gradient(#99d3f0, #318ebd)">
-
   <div class="main">
     <!--Navigation Menu-->
     <div class="sidenav">
@@ -69,23 +66,15 @@
       <a href="signout.php">Logout</a>
     </div>
 
-    <main style="padding-top:300px; padding-left:300px; padding-bottom:300px;">
-        <h2>Sign in</h2>
-        <form role="form" onsubmit="signIn(event);" autocomplete="off">
-            <div class="form-group">
-                <input type="username" name="username" id="username" placeholder="Username" required>
-            </div>
-            <div class="form-group">
-                <button type="submit">Sign In</button>
-            </div>
-        </form>
-        <p>Don't have an account? <a href="signup.html">Sign Up</a> here</p>
-    </main>
 
-    <footer class="w3-container w3-padding-64 w3-center w3-blue w3-xlarge">
-    <p> Team 2: My Movie List </p>
-    </footer>
-
-    <script type="text/javascript" src="script.js"></script>
+    <?php
+      session_start();
+      session_unset();
+      session_destroy();
+      header("location:index.php");
+    ?>
 </body>
+<footer class="w3-container w3-padding-64 w3-center w3-blue w3-xlarge">
+
+</footer>
 </html>

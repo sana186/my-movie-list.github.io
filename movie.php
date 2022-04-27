@@ -5,6 +5,7 @@
 <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<?php session_start() ?>
 </head>
 <style>
 body {
@@ -89,10 +90,11 @@ form.example::after {
 <div class="main">
 <body style="background-image: linear-gradient(#99d3f0, #318ebd)">
 <div class="sidenav">
-  <a href="index.html">Home</a>
+  <a href="index.php">Home</a>
   <a href="movie.php">Movies</a>
   <a href="signup.html">My Account</a>
   <a href="favorites.php">My Favorites</a>
+  <a href="signout.php">Logout</a>
 </div>
 
 <!-- Website Description -->
@@ -102,7 +104,11 @@ form.example::after {
 </p>
 </section>
 
-
+<!--get user-->
+<?php if(!isset($_SESSION['user'])){
+  echo "Please login to add movies to your favorites";
+}
+?>
 <!--Search field-->
 <section class="w3-container w3-center w3-content" style="max-width:600px">
 <!-- (A) SEARCH FORM -->

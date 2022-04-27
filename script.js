@@ -30,7 +30,8 @@ function signIn(e) {
         alert("Incorrect login credentials");
     }
     else{
-        location.href = "index.html";
+        //location.href = "index.php";
+        location.href = "index.php?user=" + username;
     }
     e.preventDefault();
 }
