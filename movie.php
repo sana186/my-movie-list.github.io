@@ -103,12 +103,6 @@ form.example::after {
   <p class="w3-justify">My Movie List is an all-in-one, cross-platform service for tracking the movies you’ve watched, enjoyed, and wish to know more about.
 </p>
 </section>
-
-<!--get user-->
-<?php if(!isset($_SESSION['user'])){
-  echo "Please login to add movies to your favorites";
-}
-?>
 <!--Search field-->
 <section class="w3-container w3-center w3-content" style="max-width:600px">
 <!-- (A) SEARCH FORM -->
@@ -124,57 +118,61 @@ form.example::after {
 // Josef - k_u83w1u0o
 // Connor - k_1nw7v1rh
 if (isset($_POST["add"])){
-  
 
-  $user = "jpeter37";
-  $entry = $user . "," . $_POST["addMovie"] . PHP_EOL; 
-  $search_entry = $user . "," . $_POST["addMovie"];
-  $movieName = $_POST["movieName"];
-  $movieImage = $_POST["movieImage"];
-  $movieDescription = $_POST["movieDescription"];
+    if(isset($_SESSION['user'])){
+		$user = $_SESSION['user'];
+		$entry = $user . "," . $_POST["addMovie"] . PHP_EOL; 
+		$search_entry = $user . "," . $_POST["addMovie"];
+		$movieName = $_POST["movieName"];
+		$movieImage = $_POST["movieImage"];
+		$movieDescription = $_POST["movieDescription"];
 
-  $array = array($_POST["addMovie"] => array("Title" => $movieName, "Image" => $movieImage, "Description" => $movieDescription));
-  $json = json_encode($array);
+		$array = array($_POST["addMovie"] => array("Title" => $movieName, "Image" => $movieImage, "Description" => $movieDescription));
+		$json = json_encode($array);
 
-  if (!file_exists('cache.json')) {
-    touch('cache.json');
-  }
+		if (!file_exists('cache.json')) {
+            touch('cache.json');
+		}
 
-  if (exec('cat cache.json | grep '.escapeshellarg($search_entry))) {
-  }
-  else {
-  $file = fopen("cache.json","a+") or die("no file available");
-  if (flock($file, LOCK_EX)) {
-      fwrite($file, $json);
-      flock($file, LOCK_UN);
-      fclose($file);
-      chmod($file, 0777);
-  }
-  }
+		if (exec('cat cache.json | grep '.escapeshellarg($search_entry))) {
+		}
+		else {
+			$file = fopen('cache.json','a+') or die("no file available");
+			if (flock($file, LOCK_EX)) {
+				fwrite($file, $json);
+				flock($file, LOCK_UN);
+				fclose($file);
+				chmod("cache.json", 0777);
+			}
+		}
 
-  if (!file_exists('favorites.txt')) {
-    touch('favorites.txt');
-  }
+		if (!file_exists('favorites.txt')) {
+            touch('favorites.txt');
+		}
 
-  if (exec('cat favorites.txt | grep '.escapeshellarg($search_entry))) {
-    echo 'Movie already found in favorites!';
-  }
+		if (exec('cat favorites.txt | grep '.escapeshellarg($search_entry))) {
+            echo 'Movie already found in favorites!';
+		}
 
-  else {
-  $file = fopen("favorites.txt","a+") or die("no file available");
-  if (flock($file, LOCK_EX)) {
-      fwrite($file, $entry);
-      flock($file, LOCK_UN);
-      fclose($file);
-      chmod($file, 0777);
-  }
-  echo "<br />";
-  echo $movieName . " succesfully added to favorites <br />";
-  echo "<br />";
-  }
+		else {
+			$file = fopen('favorites.txt','a+') or die('no file available');
+			if (flock($file, LOCK_EX)) {
+				fwrite($file, $entry);
+				flock($file, LOCK_UN);
+				fclose($file);
+				chmod('favorites.txt', 0777);
+			}
+			echo 'br />';
+			echo $movieName . ' succesfully added to favorites <br />';
+			echo '<br />';
+		}
 
+	}
+	else{
+		echo 'Please sign in first in order to add movies to your favorites!';
+	}
 }
-if (isset($_POST["search"])) {
+if (isset($_POST['search'])) {
 
   $searchString = str_replace(" ", "%20" ,$_POST["search"]); 
   $json=file_get_contents("https://imdb-api.com/en/API/SearchTitle/k_u83w1u0o/" . $searchString . "");
