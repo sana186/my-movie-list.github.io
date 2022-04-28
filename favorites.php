@@ -110,6 +110,7 @@ form.example::after {
 // Josef - k_u83w1u0o
 // Connor - k_1nw7v1rh
 
+
 if (isset($_GET['delete'])){
   $delete = $_GET['delete'];
 }
@@ -140,19 +141,29 @@ if($delete != "" && $delete >! $lines || $delete === '0') {
 <form method="post" action="">
 <?php
  
+
+ $file_name_Cache = "cache.txt";
+ $cacheFile = file($file_name_Cache);
+
+
 foreach($textFile as $key => $val) {
 
   $movie = explode(",", $val);
 
 
-  $jsonFile = file_get_contents("cache.json");
-  $movieJSON = json_decode($jsonFile);
+  //$jsonFile = file_get_contents("cache.json");
+  //$movieJSON = json_decode($jsonFile);
+  $user = $_SESSION['user'];
 
-  foreach($movieJSON as $movieCache => $values) {
-    if($movieCache == trim($movie[1])){
-      $titleCache = $values->Title;
-      $yearCache = $values->Description;
-      $imageCache = $values->Image;
+  
+
+
+  foreach($cacheFile as $movieCache => $values) {
+    $userFavorite = explode(",", $values);
+    if( ($userFavorite[0] == trim($movie[1]) ) && ($user==trim($movie[0]))){
+      $titleCache = $userFavorite[1];
+      $yearCache = $userFavorite[3];
+      $imageCache = $userFavorite[2];
 
       $line = @$line .  "<table border='1'><tr><td width='200' height='100'>" . "<img width='50' src=" . $imageCache . ">" . "</td>" .
                     "<td width='200' height='100'>" . $titleCache . "</td>" .

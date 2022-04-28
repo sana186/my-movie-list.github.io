@@ -119,7 +119,7 @@ form.example::after {
 // Connor - k_1nw7v1rh
 if (isset($_POST["add"])){
 
-    if(isset($_SESSION['user'])){
+  if(isset($_SESSION['user'])){
 		$user = $_SESSION['user'];
 		$entry = $user . "," . $_POST["addMovie"] . PHP_EOL; 
 		$search_entry = $user . "," . $_POST["addMovie"];
@@ -127,22 +127,20 @@ if (isset($_POST["add"])){
 		$movieImage = $_POST["movieImage"];
 		$movieDescription = $_POST["movieDescription"];
 
-		$array = array($_POST["addMovie"] => array("Title" => $movieName, "Image" => $movieImage, "Description" => $movieDescription));
-		$json = json_encode($array);
+		$strAdd = $_POST["addMovie"] .",".$movieName .",".$movieImage .",".$movieDescription;
 
-		if (!file_exists('cache.json')) {
-            touch('cache.json');
+		if (!file_exists('cache.txt')) {
+            touch('cache.txt');
 		}
 
-		if (exec('cat cache.json | grep '.escapeshellarg($search_entry))) {
+		if (exec('cat cache.txt | grep '.escapeshellarg($search_entry))) {
 		}
 		else {
-			$file = fopen('cache.json','a+') or die("no file available");
+			$file = fopen('cache.txt','a+') or die("no file available");
 			if (flock($file, LOCK_EX)) {
-				fwrite($file, $json);
+				fwrite($file, $strAdd);
 				flock($file, LOCK_UN);
 				fclose($file);
-				chmod("cache.json", 0777);
 			}
 		}
 
@@ -160,11 +158,8 @@ if (isset($_POST["add"])){
 				fwrite($file, $entry);
 				flock($file, LOCK_UN);
 				fclose($file);
-				chmod('favorites.txt', 0777);
 			}
-			echo 'br />';
 			echo $movieName . ' succesfully added to favorites <br />';
-			echo '<br />';
 		}
 
 	}
