@@ -1,3 +1,41 @@
+<<<<<<< Updated upstream
+=======
+<?php 
+
+session_start();
+
+$uri = $_SERVER['REQUEST_URI'];
+$urlArray = parse_url($uri); 
+$path = $urlArray['path'];
+
+switch ($path) {
+  case '/movie.php':
+    include 'movie.php';
+    exit();
+  case '/favorites.php':
+    include 'favorites.php';
+      exit();
+  case '/signup.html':
+    include 'signup.html';
+      exit();
+  case '/signin.html':
+      include 'signin.html';
+      exit();
+  case '/signout.php':
+      include 'index.php';
+      exit();
+  default:
+      break;
+
+}
+
+?>
+
+
+
+
+
+>>>>>>> Stashed changes
 <!DOCTYPE html>
 <html>
 <meta charset="UTF-8">

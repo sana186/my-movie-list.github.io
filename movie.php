@@ -1,3 +1,28 @@
+<<<<<<< Updated upstream
+=======
+<?php 
+session_start();
+require_once __DIR__ . '/vendor/autoload.php';
+
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+
+# [START use_cloud_storage_tools]
+use google\appengine\api\cloud_storage\CloudStorageTools;
+use Google\Cloud\Storage\StorageClient;
+# [END use_cloud_storage_tools]
+use Silex\Application;
+use Silex\Provider\TwigServiceProvider;
+use Symfony\Component\HttpFoundation\Request;
+
+// create the Silex application
+$app = new Application();
+$app->register(new TwigServiceProvider());
+$app['twig.path'] = [ __DIR__ ];
+
+?>
+>>>>>>> Stashed changes
 <!DOCTYPE html>
 <html>
 <meta charset="UTF-8">
@@ -119,14 +144,22 @@ form.example::after {
 // Connor - k_1nw7v1rh
 if (isset($_POST["add"])){
 
+<<<<<<< Updated upstream
   if(isset($_SESSION['user'])){
 		$user = $_SESSION['user'];
 		$entry = $user . "," . $_POST["addMovie"] . PHP_EOL; 
 		$search_entry = $user . "," . $_POST["addMovie"];
 		$movieName = $_POST["movieName"];
+=======
+    if(isset($_SESSION['user'])){
+		$user = $_SESSION['user']; 
+        $movieName = $_POST["movieName"];
+>>>>>>> Stashed changes
 		$movieImage = $_POST["movieImage"];
 		$movieDescription = $_POST["movieDescription"];
+  
 
+<<<<<<< Updated upstream
 		$strAdd = $_POST["addMovie"] .",".$movieName .",".$movieImage .",".$movieDescription;
 
 		if (!file_exists('cache.txt')) {
@@ -161,20 +194,74 @@ if (isset($_POST["add"])){
 			}
 			echo $movieName . ' succesfully added to favorites <br />';
 		}
+=======
 
-	}
+        $storage = new StorageClient();
+        $storage->registerStreamWrapper();
+        
+        $additionalArray = array(
+             $_POST["addMovie"] => array(
+               "title" => $movieName,
+               "image" => $movieImage,
+               "year" => $movieDescription
+           ));
+        
+        //open or read json data
+        $data_results = file_get_contents('gs://mymovielistit390gmu.appspot.com/cache.txt');
+        //$data_results = file_get_contents('cache.txt');
+        $tempArray = json_decode($data_results);
+
+            
+        //append additional json to json file
+        $tempArray[] = $additionalArray ;
+        $jsonData = json_encode($tempArray);
+        
+         file_put_contents('gs://mymovielistit390gmu.appspot.com/cache.txt', $jsonData);
+            //file_put_contents('cache.txt', $jsonData);
+
+        $arrayFavorites = array(
+             $user => $_POST["addMovie"]
+        );
+
+        $jsonNewFavorites = json_encode($arrayFavorites);
+>>>>>>> Stashed changes
+
+        //open or read json data
+        //$data_results = file_get_contents('gs://mymovielistit390gmu.appspot.com/favorites.txt');
+        $data_results = file_get_contents('favorites.txt');
+        
+        $tempArray = json_decode($data_results);
+        $jsonNewFavorites = json_decode($jsonNewFavorites);
+
+        //append additional json to json file
+        $tempArray[] = $arrayFavorites ;
+        $jsonFavorites = json_encode($tempArray);
+
+
+        file_put_contents('gs://mymovielistit390gmu.appspot.com/favorites.txt', $jsonFavorites);
+        //file_put_contents('favorites.txt', $jsonFavorites);
+
+        echo "<br>";
+        echo "<br>";
+        echo str_replace("_", " " ,$movieName) . " has been added to your favorites";
+        echo "<br>";
+        echo "<br>";
+ 
+    }
 	else{
 		echo 'Please sign in first in order to add movies to your favorites!';
 	}
 }
+
+
 if (isset($_POST['search'])) {
 
-  $searchString = str_replace(" ", "%20" ,$_POST["search"]); 
-  $json=file_get_contents("https://imdb-api.com/en/API/SearchTitle/k_u83w1u0o/" . $searchString . "");
-  $json = json_decode($json,true);
-  $i = 0;
+    $searchString = str_replace(" ", "%20" ,$_POST["search"]); 
+    $json=file_get_contents("https://imdb-api.com/en/API/SearchTitle/k_u83w1u0o/" . $searchString . "");
+    $json = json_decode($json,true);
+    $i = 0;
 
-  ?>
+?>
 
  
   <table border='1' padding-top='50px'>
@@ -186,25 +273,25 @@ if (isset($_POST['search'])) {
         </tr>
 
         <?php
-  while ($i < count($json)){
-    
-    
-    if ($i === 0 || ($i % 2 == 0)){
-        echo "<tr>";
-        echo "<td width='200' height='100'>  " . "<img width='50' src=" . $json['results'][$i]['image'] . ">". "</td>";
-        echo "<td width='200' height='100'>  " . $json['results'][$i]['title']. "</td>";
-        echo "<td width='200' height='100'>  " . $json['results'][$i]['description'] . "</td>";
-        echo "<td width='200' height='100'> <form method='post' action=''>  <input type='submit' name='add' value='add'>
-                                                                      </td> <input type='hidden' id='movieName' name='movieName' value=" . $json['results'][$i]['title'] . ">
-                                                                            <input type='hidden' id='movieDescription' name='movieDescription' value=" . $json['results'][$i]['description'] . ">
+    while ($i < count($json)){
+        if ($i === 0 || ($i % 2 == 0)){
+            $yearJSON = (int) filter_var($json['results'][$i]['description'], FILTER_SANITIZE_NUMBER_INT);
+            $movieNameJSON = $json['results'][$i]['title'];
+            echo "<tr>";
+            echo "<td width='200' height='100'>  " . "<img width='50' src=" . $json['results'][$i]['image'] . ">". "</td>";
+            echo "<td width='200' height='100'>  " . $movieNameJSON . "</td>";
+            echo "<td width='200' height='100'>  " . $yearJSON . "</td>";
+            echo "<td width='200' height='100'> <form method='post' action=''>  <input type='submit' name='add' value='add'>
+                                                                      </td> <input type='hidden' id='movieName' name='movieName' value=" . str_replace(" ", "_" ,$movieNameJSON) . ">
+                                                                            <input type='hidden' id='movieDescription' name='movieDescription' value=" . $yearJSON . ">
                                                                             <input type='hidden' id='movieImage' name='movieImage' value=" . $json['results'][$i]['image'] . ">
                                                                             <input type='hidden' id='addMovie' name='addMovie' value=" . $json['results'][$i]['id'] . "></form></td>";
-        echo "<tr>";
+            echo "<tr>";
+        }
+        $i++;
     }
-    $i++;
-  }
-    ?>
-    </table>
+        ?>
+  </table>
   
 <?php  
 }

@@ -8,6 +8,47 @@
     <title>Sign in</title>
     <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css">
+<<<<<<< Updated upstream
+=======
+    <script type="text/javascript">
+        const signUp = e => {
+    let username = document.getElementById('username').value;
+
+    let formData = JSON.parse(localStorage.getItem('formData')) || [];
+
+    let exist = formData.length &&
+        JSON.parse(localStorage.getItem('formData')).some(data =>
+            data.username.toLowerCase() == username.toLowerCase()
+        );
+
+    if(!exist){
+        formData.push({ username });
+        localStorage.setItem('formData', JSON.stringify(formData));
+        document.querySelector('form').reset();
+        document.getElementById('username').focus();
+        alert("Account Created.\n\nPlease Sign in using the link below.");
+    }
+    else{
+        alert("This username has already been made. Please try again.");
+    }
+    e.preventDefault();
+}
+
+function signIn(e) {
+    let username = document.getElementById('username').value;
+    let formData = JSON.parse(localStorage.getItem('formData')) || [];
+    let exist = formData.length &&
+    JSON.parse(localStorage.getItem('formData')).some(data => data.username.toLowerCase() == username);
+    if(!exist){
+        alert("Incorrect login credentials");
+    }
+    else{
+        //location.href = "index.php?user=" + username;
+        location.href = "https://mymovielistit390gmu.de.r.appspot.com/index.php?user=" + username;
+    }
+    e.preventDefault();
+}
+>>>>>>> Stashed changes
 
     <style>
     body {

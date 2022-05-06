@@ -1,3 +1,27 @@
+<<<<<<< Updated upstream
+=======
+<?php 
+session_start();
+require_once __DIR__ . '/vendor/autoload.php';
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+# [START use_cloud_storage_tools]
+use google\appengine\api\cloud_storage\CloudStorageTools;
+use Google\Cloud\Storage\StorageClient;
+# [END use_cloud_storage_tools]
+use Silex\Application;
+use Silex\Provider\TwigServiceProvider;
+use Symfony\Component\HttpFoundation\Request;
+
+// create the Silex application
+$app = new Application();
+$app->register(new TwigServiceProvider());
+$app['twig.path'] = [ __DIR__ ];
+
+
+?>
+>>>>>>> Stashed changes
 <!DOCTYPE html>
 <html>
 <meta charset="UTF-8">
@@ -103,40 +127,59 @@ form.example::after {
   <p text-align="center">Here is a list of your current favorites. <br><br> You can add more movies over the movies link</p>
 </section>
 <section class="w3-container w3-center w3-content" style="max-width:600px">
+
 <?php
 
+<<<<<<< Updated upstream
 // (B) PROCESS SEARCH WHEN FORM SUBMITTED
 // NOTE: API keys for IMDb allow 100 free requests per day - if maximum is reached, switch to another API key.
 // Josef - k_u83w1u0o
 // Connor - k_1nw7v1rh
 
+=======
+if (isset($_POST["remove"])){
 
-if (isset($_GET['delete'])){
-  $delete = $_GET['delete'];
-}
-else{
-  $delete = "";
-}
-$file_name = "favorites.txt";
-$size = filesize($file_name);
-$textFile = file($file_name);
-$lines = count($textFile);
-if($size == "0")
-{
-echo "Nothing to display, Seems like file is empty. Try adding some data to it!!!";
-exit;
-}
-if($delete != "" && $delete >! $lines || $delete === '0') {
-    $textFile[$delete] = "";
-    $fileUpdate = fopen($file_name, "wb");
-    for($a=0; $a< $lines; $a++) {
-           fwrite($fileUpdate, $textFile[$a]);
-    }
-    fclose($fileUpdate);
-   header("Location:favorites.php");
-   exit;
-}
+        $storage = new StorageClient();
+        $storage->registerStreamWrapper();      
+               
+        //open or read json data
+        $data_results = file_get_contents('gs://mymovielistit390gmu.appspot.com/favorites.txt');
+        $tempArray = json_decode($data_results);
+        
+        //append additional json to json file
 
+        $counter=0;
+        
+        foreach($tempArray as $item) {
+            foreach ($item as $key => $val) {
+                if($key==$_POST['userName']){   
+                    if($val==$_POST['removeMovie']){
+                        break 2;
+                    }
+                }
+                $counter++;
+            }
+        }
+        var_dump($tempArray);
+        echo "<br>";
+        echo "<br>";
+        unset($tempArray[$counter]);
+        var_dump($tempArray);
+
+        $tempArray = array_values($tempArray);
+        $jsonData = json_encode($tempArray);
+        
+        echo "<br>";
+        echo "<br>";
+        file_put_contents('gs://mymovielistit390gmu.appspot.com/favorites.txt', $jsonData);
+
+		echo 'Movie removed from your favorites!';
+	
+}
+>>>>>>> Stashed changes
+
+
+<<<<<<< Updated upstream
 ?>
 <form method="post" action="">
 <?php
@@ -147,10 +190,17 @@ if($delete != "" && $delete >! $lines || $delete === '0') {
 
 
 foreach($textFile as $key => $val) {
+=======
+>>>>>>> Stashed changes
 
-  $movie = explode(",", $val);
+//if(isset($_SESSION['user'])){
+    //$userName=$_SESSION['user'];
+    $userName ="jpeter";
 
+    $cacheFile = file_get_contents('https://storage.googleapis.com/mymovielistit390gmu.appspot.com/cache.txt');
+    $favoritesFile = file_get_contents('https://storage.googleapis.com/mymovielistit390gmu.appspot.com/favorites.txt');
 
+<<<<<<< Updated upstream
   //$jsonFile = file_get_contents("cache.json");
   //$movieJSON = json_decode($jsonFile);
   $user = $_SESSION['user'];
@@ -164,21 +214,48 @@ foreach($textFile as $key => $val) {
       $titleCache = $userFavorite[1];
       $yearCache = $userFavorite[3];
       $imageCache = $userFavorite[2];
+=======
+    $movieJSON = json_decode($cacheFile);
+    $favoritesJSON = json_decode($favoritesFile);
 
-      $line = @$line .  "<table border='1'><tr><td width='200' height='100'>" . "<img width='50' src=" . $imageCache . ">" . "</td>" .
-                    "<td width='200' height='100'>" . $titleCache . "</td>" .
-                    "<td width='200' height='100'>" . $yearCache . "</td>" . 
-                    "<td width='200' height='100'>" . "<a href =?delete=$key> Delete </a><br />" . "</td></tr></table>";
-    echo $line; 
+    $tmpUserFavorites = [];
+>>>>>>> Stashed changes
+
+ 
+
+    foreach($favoritesJSON as $item) {
+        foreach ($item as $key => $val) {
+            if($key==$userName){
+                array_push($tmpUserFavorites, $val);
+            }
+        }
     }
-  }
 
-    ?>
-  
-  </form>
+    $arrlength = count($tmpUserFavorites);
 
-  <?php
-}
+ 
+    echo "<table border='1'><tr><td width='200' height='50'>Image</td><td width='200' height='50'>Title</td><td width='200' height='50'>Year</td><td width='200' height='50'>Remove</td></tr>";
+    
+    for($x = 0; $x < $arrlength; $x++) {
+        foreach($movieJSON as $item) {
+            foreach ($item as $key => $val) {
+                if($key==$tmpUserFavorites[$x]){    
+                    $titleCache = $val->title;
+                    $titleCache = str_replace("_", " " ,$titleCache);
+                    $imageCache = $val->image;
+                    $yearCache = $val->year;
+                    echo "<tr><td width='200' height='50'><img width='50' src=" . $imageCache . "></td><td width='200' height='50'>".$titleCache."</td><td width='200' height='50'>".$yearCache."</td><td width='200' height='100'><form method='post' action=''><input type='submit' name='remove' value='remove'></td> <input type='hidden' id='removeMovie' name='removeMovie' value=" . $key . "><input type='hidden' id='userName' name='userName' value=" . $userName . "></form></td></tr>";
+                }
+            }
+        }
+    }
+
+    echo "</table>";
+//}
+//else{
+//    echo "Please sign in to see your favorites";
+//}
+
 ?>
 </section>
 <!--Footer-->
