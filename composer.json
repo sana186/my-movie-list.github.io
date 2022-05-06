@@ -1,0 +1,7 @@
+{
+    "require": {
+        "google/cloud-storage": "^1.26",
+        "google/cloud": "^0.178.0",
+        "silex/silex": "^2.3"
+    }
+}
