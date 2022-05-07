@@ -1,5 +1,3 @@
-<<<<<<< Updated upstream
-=======
 <?php 
 
 session_start();
@@ -15,9 +13,6 @@ switch ($path) {
   case '/favorites.php':
     include 'favorites.php';
       exit();
-  case '/signup.html':
-    include 'signup.html';
-      exit();
   case '/signin.html':
       include 'signin.html';
       exit();
@@ -30,19 +25,12 @@ switch ($path) {
 }
 
 ?>
-
-
-
-
-
->>>>>>> Stashed changes
 <!DOCTYPE html>
 <html>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css">
-<?php session_start() ?>
 </head>
 <style>
 body {
@@ -89,7 +77,7 @@ font-size: medium;
 <div class="sidenav">
   <a href="index.php">Home</a>
   <a href="movie.php">Movies</a>
-  <a href="signup.html">My Account</a>
+  <a href="signin.html">My Account</a>
   <a href="favorites.php">My Favorites</a>
   <a href="signout.php">Logout</a>
 </div>

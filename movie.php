@@ -1,5 +1,3 @@
-<<<<<<< Updated upstream
-=======
 <?php 
 session_start();
 require_once __DIR__ . '/vendor/autoload.php';
@@ -21,8 +19,10 @@ $app = new Application();
 $app->register(new TwigServiceProvider());
 $app['twig.path'] = [ __DIR__ ];
 
+$storage = new StorageClient();
+$storage->registerStreamWrapper();
+
 ?>
->>>>>>> Stashed changes
 <!DOCTYPE html>
 <html>
 <meta charset="UTF-8">
@@ -30,7 +30,7 @@ $app['twig.path'] = [ __DIR__ ];
 <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-<?php session_start() ?>
+
 </head>
 <style>
 body {
@@ -110,14 +110,12 @@ form.example::after {
 }
 </style>
 
-
-
 <div class="main">
 <body style="background-image: linear-gradient(#99d3f0, #318ebd)">
 <div class="sidenav">
   <a href="index.php">Home</a>
   <a href="movie.php">Movies</a>
-  <a href="signup.html">My Account</a>
+  <a href="signin.html">My Account</a>
   <a href="favorites.php">My Favorites</a>
   <a href="signout.php">Logout</a>
 </div>
@@ -144,108 +142,57 @@ form.example::after {
 // Connor - k_1nw7v1rh
 if (isset($_POST["add"])){
 
-<<<<<<< Updated upstream
   if(isset($_SESSION['user'])){
-		$user = $_SESSION['user'];
-		$entry = $user . "," . $_POST["addMovie"] . PHP_EOL; 
-		$search_entry = $user . "," . $_POST["addMovie"];
-		$movieName = $_POST["movieName"];
-=======
-    if(isset($_SESSION['user'])){
 		$user = $_SESSION['user']; 
-        $movieName = $_POST["movieName"];
->>>>>>> Stashed changes
+    $movieName = $_POST["movieName"];
 		$movieImage = $_POST["movieImage"];
 		$movieDescription = $_POST["movieDescription"];
-  
-
-<<<<<<< Updated upstream
-		$strAdd = $_POST["addMovie"] .",".$movieName .",".$movieImage .",".$movieDescription;
-
-		if (!file_exists('cache.txt')) {
-            touch('cache.txt');
-		}
-
-		if (exec('cat cache.txt | grep '.escapeshellarg($search_entry))) {
-		}
-		else {
-			$file = fopen('cache.txt','a+') or die("no file available");
-			if (flock($file, LOCK_EX)) {
-				fwrite($file, $strAdd);
-				flock($file, LOCK_UN);
-				fclose($file);
-			}
-		}
-
-		if (!file_exists('favorites.txt')) {
-            touch('favorites.txt');
-		}
-
-		if (exec('cat favorites.txt | grep '.escapeshellarg($search_entry))) {
-            echo 'Movie already found in favorites!';
-		}
-
-		else {
-			$file = fopen('favorites.txt','a+') or die('no file available');
-			if (flock($file, LOCK_EX)) {
-				fwrite($file, $entry);
-				flock($file, LOCK_UN);
-				fclose($file);
-			}
-			echo $movieName . ' succesfully added to favorites <br />';
-		}
-=======
-
-        $storage = new StorageClient();
-        $storage->registerStreamWrapper();
         
-        $additionalArray = array(
-             $_POST["addMovie"] => array(
-               "title" => $movieName,
-               "image" => $movieImage,
-               "year" => $movieDescription
-           ));
+    $additionalArray = array(
+          $_POST["addMovie"] => array(
+            "title" => $movieName,
+            "image" => $movieImage,
+            "year" => $movieDescription
+        ));
+    
+    //open or read json data
+    $data_results = file_get_contents('gs://mymovielistit390gmu.appspot.com/cache.txt');
+    //$data_results = file_get_contents('cache.txt');
+    $tempArray = json_decode($data_results);
+
         
-        //open or read json data
-        $data_results = file_get_contents('gs://mymovielistit390gmu.appspot.com/cache.txt');
-        //$data_results = file_get_contents('cache.txt');
-        $tempArray = json_decode($data_results);
-
-            
-        //append additional json to json file
-        $tempArray[] = $additionalArray ;
-        $jsonData = json_encode($tempArray);
-        
-         file_put_contents('gs://mymovielistit390gmu.appspot.com/cache.txt', $jsonData);
-            //file_put_contents('cache.txt', $jsonData);
-
-        $arrayFavorites = array(
-             $user => $_POST["addMovie"]
-        );
-
-        $jsonNewFavorites = json_encode($arrayFavorites);
->>>>>>> Stashed changes
-
-        //open or read json data
-        //$data_results = file_get_contents('gs://mymovielistit390gmu.appspot.com/favorites.txt');
-        $data_results = file_get_contents('favorites.txt');
-        
-        $tempArray = json_decode($data_results);
-        $jsonNewFavorites = json_decode($jsonNewFavorites);
-
-        //append additional json to json file
-        $tempArray[] = $arrayFavorites ;
-        $jsonFavorites = json_encode($tempArray);
+    //append additional json to json file
+    $tempArray[] = $additionalArray ;
+    $jsonData = json_encode($tempArray);
+    
+    file_put_contents('gs://mymovielistit390gmu.appspot.com/cache.txt', $jsonData);
 
 
-        file_put_contents('gs://mymovielistit390gmu.appspot.com/favorites.txt', $jsonFavorites);
-        //file_put_contents('favorites.txt', $jsonFavorites);
+    $arrayFavorites = array(
+          $user => $_POST["addMovie"]
+    );
 
-        echo "<br>";
-        echo "<br>";
-        echo str_replace("_", " " ,$movieName) . " has been added to your favorites";
-        echo "<br>";
-        echo "<br>";
+    $jsonNewFavorites = json_encode($arrayFavorites);
+
+    //open or read json data
+    $data_results = file_get_contents('gs://mymovielistit390gmu.appspot.com/favorites.txt');
+    //$data_results = file_get_contents('favorites.txt');
+    
+    $tempArray = json_decode($data_results);
+    $jsonNewFavorites = json_decode($jsonNewFavorites);
+
+    //append additional json to json file
+    $tempArray[] = $arrayFavorites ;
+    $jsonFavorites = json_encode($tempArray);
+
+
+    file_put_contents('gs://mymovielistit390gmu.appspot.com/favorites.txt', $jsonFavorites);
+
+    echo "<br>";
+    echo "<br>";
+    echo str_replace("_", " " ,$movieName) . " has been added to your favorites";
+    echo "<br>";
+    echo "<br>";
  
     }
 	else{
