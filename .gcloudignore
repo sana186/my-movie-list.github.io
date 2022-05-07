@@ -12,7 +12,7 @@
 # below:
 .git
 .gitignore
-/google-cloud-sdk
+/google-cloud-sdk/
 /.vs
 
 # PHP Composer dependencies:
