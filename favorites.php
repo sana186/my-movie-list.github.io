@@ -1,9 +1,14 @@
 <?php 
 session_start();
 require_once __DIR__ . '/vendor/autoload.php';
+
+use google\appengine\api\users\User;
+use google\appengine\api\users\UserService;
+
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
+
 # [START use_cloud_storage_tools]
 use google\appengine\api\cloud_storage\CloudStorageTools;
 use Google\Cloud\Storage\StorageClient;
@@ -18,7 +23,8 @@ $app->register(new TwigServiceProvider());
 $app['twig.path'] = [ __DIR__ ];
 
 $storage = new StorageClient();
-$storage->registerStreamWrapper();  
+$storage->registerStreamWrapper();
+ 
 ?>
 <!DOCTYPE html>
 <html>
@@ -130,48 +136,28 @@ form.example::after {
 if(isset($_SESSION['user'])){
     $userName=$_SESSION['user'];
 
-    $cacheFile = file_get_contents('gs://mymovielistit390gmu.appspot.com/cache.txt');
-    $favoritesFile = file_get_contents('gs://mymovielistit390gmu.appspot.com/favorites.txt');
-
-
-    $movieJSON = json_decode($cacheFile);
-    $favoritesJSON = json_decode($favoritesFile);
-
-    $tmpUserFavorites = [];
-
-    foreach($favoritesJSON as $item) {
-        foreach ($item as $key => $val) {
-            if($key==$userName){
-                array_push($tmpUserFavorites, $val);
-            }
-        }
+    try{
+      //$db = new pdo('mysql:host=35.229.81.68;port=3306;dbname=guestbook', 'test', 'test');
+      $db = new pdo('mysql:host=35.229.81.68:3306;dbname=guestbook',
+        'test',
+        'test'
+        );
+    }catch(PDOException $ex){
+        echo $ex->getMessage();
     }
 
-    $arrlength = count($tmpUserFavorites);
-    
-    if($arrlength==0){
-      echo "<br><br>you do not have any favorites yet<br><br>";
-    }
-  
-    else{  
-    echo "<table border='1'><tr><td width='200' height='50'>Image</td><td width='200' height='50'>Title</td><td width='200' height='50'>Year</td></tr>";
+    $stmt = $db->prepare("SELECT * from favorites, cache where favorites.userFavorite=cache.movieID and userName=?;");
+    $stmt->execute(array($userName));
+    $data = $stmt->fetchAll();
 
-    for($x = 0; $x < $arrlength; $x++) {
-        foreach($movieJSON as $item) {
-            foreach ($item as $key => $val) {
-                if($key==$tmpUserFavorites[$x]){    
-                    $titleCache = $val->title;
-                    $titleCache = str_replace("_", " " ,$titleCache);
-                    $imageCache = $val->image;
-                    $yearCache = $val->year;
-                    echo "<tr><td width='200' height='50'><img width='50' src=" . $imageCache . "></td><td width='200' height='50'>".$titleCache."</td><td width='200' height='50'>".$yearCache."</td></tr>";
-                }
-            }
-        }
+    echo "<table border='1' padding-top='50px'><tr><th>Picture</th><th>Title</th><th>Year</th></tr>";
+
+    foreach ($data as $row) {
+      $movieTitle = str_replace("_", "" ,$row['movieTitle']);
+      echo "<tr><td width='200' height='50'><img width='50' src=" . $row['movieImage'] . "></td><td width='200' height='50'>".$movieTitle."</td><td width='200' height='50'>".$row['movieYear']."</td></tr>";
     }
 
     echo "</table>";
-  }
 }
 else{
     echo "Please sign in to see your favorites";

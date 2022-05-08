@@ -42,7 +42,7 @@
           }
           else{
               //location.href = "index.php?user=" + username;
-              location.href = "https://mymovielistit390gmu.de.r.appspot.com/index.php?user=" + username;
+              location.href = "/index.php?user=" + username;
           }
           e.preventDefault();
         }
@@ -117,7 +117,6 @@
                 <button type="submit">Sign In</button>
             </div>
         </form>
-        <p>Don't have an account? <a href="signup.html">Sign Up</a> here</p>
 
         <h2>Join us by creating an account!</h2>
         <form role="form" onsubmit="signUp(event);" autocomplete="off">
@@ -128,7 +127,6 @@
                 <button type="submit">Sign Up</button>
             </div>
         </form>
-        <p>Already a member? <a href="signin.html">Sign In</a></p>
     </main>
 
     <footer class="w3-container w3-padding-64 w3-center w3-blue w3-xlarge">

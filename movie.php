@@ -2,6 +2,9 @@
 session_start();
 require_once __DIR__ . '/vendor/autoload.php';
 
+use google\appengine\api\users\User;
+use google\appengine\api\users\UserService;
+
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
@@ -147,53 +150,53 @@ if (isset($_POST["add"])){
     $movieName = $_POST["movieName"];
 		$movieImage = $_POST["movieImage"];
 		$movieDescription = $_POST["movieDescription"];
-        
-    $additionalArray = array(
-          $_POST["addMovie"] => array(
-            "title" => $movieName,
-            "image" => $movieImage,
-            "year" => $movieDescription
-        ));
-    
-    //open or read json data
-    $data_results = file_get_contents('gs://mymovielistit390gmu.appspot.com/cache.txt');
-    //$data_results = file_get_contents('cache.txt');
-    $tempArray = json_decode($data_results);
+    $movieID = $_POST['addMovie'];
 
-        
-    //append additional json to json file
-    $tempArray[] = $additionalArray ;
-    $jsonData = json_encode($tempArray);
-    
-    file_put_contents('gs://mymovielistit390gmu.appspot.com/cache.txt', $jsonData);
+    $db = null;
 
+    try{
+        //$db = new pdo('mysql:host=35.229.81.68;port=3306;dbname=guestbook', 'test', 'test');
+        $db = new pdo('mysql:host=35.229.81.68:3306;dbname=guestbook',
+          'test',
+          'test'
+        );
+    }catch(PDOException $ex){
+        echo $ex->getMessage();
+    }
 
-    $arrayFavorites = array(
-          $user => $_POST["addMovie"]
-    );
+    $stmt = $db->prepare("SELECT count(*) FROM favorites WHERE userName = ? and userFavorite = ?");
+    $stmt->execute(array($user, $movieID));
 
-    $jsonNewFavorites = json_encode($arrayFavorites);
+    $count = $stmt->fetchColumn();
 
-    //open or read json data
-    $data_results = file_get_contents('gs://mymovielistit390gmu.appspot.com/favorites.txt');
-    //$data_results = file_get_contents('favorites.txt');
-    
-    $tempArray = json_decode($data_results);
-    $jsonNewFavorites = json_decode($jsonNewFavorites);
+    if ($count > 0) {
+      echo "<br>";
+      echo "<br>";
+      echo "Movie already in your favorites.";
+      echo "<br>";
+      echo "<br>";
+    } else {
+      $stmt = $db->prepare('INSERT INTO favorites (userName, userFavorite) VALUES (:name, :content)');
+      $stmt->execute(array(':name' => htmlspecialchars($user), ':content' => htmlspecialchars($_POST['addMovie'])));
+      $affected_rows = $stmt->rowCount();
+    }
 
-    //append additional json to json file
-    $tempArray[] = $arrayFavorites ;
-    $jsonFavorites = json_encode($tempArray);
+    $stmt = $db->prepare("SELECT * FROM cache Where movieID = ?;");
+    $stmt->execute(array($movieID));
 
+    $count = $stmt->fetchColumn();
 
-    file_put_contents('gs://mymovielistit390gmu.appspot.com/favorites.txt', $jsonFavorites);
+    if ($count > 0) {
+    } 
+    else {
+    $stmt = $db->prepare('INSERT INTO cache (movieID,movieTitle,movieImage, movieYear ) VALUES (:movieID, :movieTitle, :movieImage, :movieYear)');
+    $stmt->execute(array(':movieID' => htmlspecialchars($_POST['addMovie']), ':movieTitle' => htmlspecialchars($movieName),':movieImage' => htmlspecialchars($movieImage),':movieYear' => htmlspecialchars($movieDescription) ));
+    $affected_rows = $stmt->rowCount();    
+    }
+    $db = null;
 
-    echo "<br>";
-    echo "<br>";
-    echo str_replace("_", " " ,$movieName) . " has been added to your favorites";
-    echo "<br>";
-    echo "<br>";
- 
+    echo 'Movie has been added to favorites!';
+
     }
 	else{
 		echo 'Please sign in first in order to add movies to your favorites!';
