@@ -46,7 +46,7 @@ $storage->registerStreamWrapper();
         <!-- Core theme CSS (includes Bootstrap)-->
         <link href="css/styles.css" rel="stylesheet" />
         <link href="css/stylesheet.css" rel="stylesheet" />
-<?php session_start() ?>
+
 </head>
 
 <body id="page-top">
