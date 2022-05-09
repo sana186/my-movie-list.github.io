@@ -1,17 +1,8 @@
 {
   "ExpandedNodes": [
     "",
-    "\\vendor",
-    "\\vendor\\monolog",
-    "\\vendor\\monolog\\monolog",
-    "\\vendor\\monolog\\monolog\\src",
-    "\\vendor\\monolog\\monolog\\src\\Monolog",
-    "\\vendor\\monolog\\monolog\\src\\Monolog\\Handler"
+    "\\js"
   ],
-<<<<<<< Updated upstream
-  "SelectedNode": "\\movie.php",
-=======
-  "SelectedNode": "\\vendor\\monolog\\monolog\\src\\Monolog\\Handler\\PushoverHandler.php",
->>>>>>> Stashed changes
+  "SelectedNode": "\\favorites.php",
   "PreviewInSolutionExplorer": false
 }

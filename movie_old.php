@@ -1,7 +1,6 @@
-<?php 
+<?php
 session_start();
 
-var_dump($_SESSION);
 
 require_once __DIR__ . '/vendor/autoload.php';
 
@@ -194,11 +193,10 @@ if (isset($_POST["add"])){
     else {
     $stmt = $db->prepare('INSERT INTO cache (movieID,movieTitle,movieImage, movieYear ) VALUES (:movieID, :movieTitle, :movieImage, :movieYear)');
     $stmt->execute(array(':movieID' => htmlspecialchars($_POST['addMovie']), ':movieTitle' => htmlspecialchars($movieName),':movieImage' => htmlspecialchars($movieImage),':movieYear' => htmlspecialchars($movieDescription) ));
-    $affected_rows = $stmt->rowCount();    
+    $affected_rows = $stmt->rowCount();   
+    echo 'Movie has been added to favorites!';
     }
     $db = null;
-
-    echo 'Movie has been added to favorites!';
 
     }
 	else{

@@ -1,8 +1,6 @@
 <?php 
 session_start();
 
-var_dump($_SESSION);
-
 require_once __DIR__ . '/vendor/autoload.php';
 
 use google\appengine\api\users\User;
@@ -30,149 +28,126 @@ $storage->registerStreamWrapper();
  
 ?>
 <!DOCTYPE html>
-<html>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-</head>
-<style>
-body {
-font-family: "Times New Roman", Times, serif;
-font-weight: bolder;
-font-size: medium;
-}
-* {
-  box-sizing: border-box;
-}
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+        <meta name="description" content="" />
+        <meta name="author" content="" />
+        <title>My Movie List</title>
+        <!-- Favicon-->
+        <link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
+        <!-- Font Awesome icons (free version)-->
+        <script src="https://use.fontawesome.com/releases/v6.1.0/js/all.js" crossorigin="anonymous"></script>
+        <!-- Google fonts-->
+        <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet" type="text/css" />
+        <link href="https://fonts.googleapis.com/css?family=Roboto+Slab:400,100,300,700" rel="stylesheet" type="text/css" />
+        <!-- Core theme CSS (includes Bootstrap)-->
+        <link href="css/styles.css" rel="stylesheet" />
+        <link href="css/stylesheet.css" rel="stylesheet" />
+    </head>
+<body id="page-top">
+        <!-- Navigation-->
+        <nav class="navbar navbar-expand-lg navbar-dark fixed-top" id="mainNav">
+            <div class="container">
+                <!--<a class="navbar-brand" href="#page-top"><img src="assets/img/navbar-logo.svg" alt="..." /></a>-->
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
 
-/* Style the search field */
-form.example input[type=text] {
-  padding: 10px;
-  font-size: 17px;
-  border: 1px solid grey;
-  float: left;
-  width: 80%;
-  background: #f1f1f1;
-}
+                    <i class="fas fa-bars ms-1"></i>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarResponsive">
+                    <ul class="navbar-nav text-uppercase ms-auto py-4 py-lg-0">
+                        <li class="nav-item"><a class="nav-link" href="index.php">Home</a></li>
+                        <li class="nav-item"><a class="nav-link" href="movie.php">Movies</a></li>
+                        <li class="nav-item"><a class="nav-link" href="signin.html">My Account</a></li>
+                        <li class="nav-item"><a class="nav-link" href="favorites.php">My Favorites</a></li>
+                        <li class="nav-item"><a class="nav-link" href="signout.php">Logout</a></li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
 
-/* Style the submit button */
-form.example button {
-  float: left;
-  width: 20%;
-  padding: 10px;
-  background: #2196F3;
-  color: white;
-  font-size: 17px;
-  border: 1px solid grey;
-  border-left: none; /* Prevent double borders */
-  cursor: pointer;
-}
+          <!-- Page Description -->
+          <header class="masthead" style="background-image: url('images/header.jpg');">
+            <div class="container">
+                <div class="masthead-heading text-uppercase">MY FAVORITES</div>
+                <div class="masthead-subheading">Here is a list of your current favorites. <br><br> You can add more movies over the movies link</div>
+            </div>
+          </header>
 
-form.example button:hover {
-  background: #0b7dda;
-}
+          <div style="align-items:center; justify-content:center; display:flex; background-color:#f7f9fa; padding-bottom:100px;padding-top:100px;">
+              <?php
 
-/* Clear floats */
-form.example::after {
-  content: "";
-  clear: both;
-  display: table;
-}
-.sidenav {
-  height: 100%;
-  width: 200px;
-  position: fixed;
-  z-index: 1;
-  top: 0;
-  left: 0;
-  background-color: #318ebd;
-  overflow-x: hidden;
-  border: 2px solid #111;
-  padding-top: 20px;
-}
-
-.sidenav a {
-  padding: 6px 6px 6px 32px;
-  text-decoration: none;
-  font-size: 25px;
-  color: #111;
-  display: block;
-}
-
-.sidenav a:hover {
-  color: #f1f1f1;
-}
-
-.main {
-  margin-left: 200px; /* Same as the width of the sidenav */
-}
-
-@media screen and (max-height: 450px) {
-  .sidenav {padding-top: 15px;}
-  .sidenav a {font-size: 18px;}
-}
-</style>
+            // (B) PROCESS SEARCH WHEN FORM SUBMITTED
+            // NOTE: API keys for IMDb allow 100 free requests per day - if maximum is reached, switch to another API key.
+            // Josef - k_u83w1u0o
+            // Connor - k_1nw7v1rh
 
 
 
-<div class="main">
-<body style="background-image: linear-gradient(#99d3f0, #318ebd)">
-<div class="sidenav">
-<a href="index.php">Home</a>
-  <a href="movie.php">Movies</a>
-  <a href="signin.html">My Account</a>
-  <a href="favorites.php">My Favorites</a>
-  <a href="signout.php">Logout</a>
-</div>
+              if(isset($_SESSION['user'])){
+                  $userName=$_SESSION['user'];
 
-<!-- Website Description -->
-<section class="w3-container w3-center w3-content" style="max-width:600px">
-  <h2 class="w3-wide">MY FAVORITES</h2>
-  <p text-align="center">Here is a list of your current favorites. <br><br> You can add more movies over the movies link</p>
-</section>
-<section class="w3-container w3-center w3-content" style="max-width:600px">
+                  try{
+                      //$db = new pdo('mysql:host=35.229.81.68;port=3306;dbname=guestbook', 'test', 'test');
+                      $db = new pdo('mysql:host=35.229.81.68:3306;dbname=guestbook',
+                        'test',
+                        'test'
+                        );
+                  }
+                  catch(PDOException $ex){
+                      echo $ex->getMessage();
+                  }
 
-<?php
+                  $stmt = $db->prepare("SELECT * from favorites, cache where favorites.userFavorite=cache.movieID and userName=?;");
+                  $stmt->execute(array($userName));
+                  $data = $stmt->fetchAll();
 
-if(isset($_SESSION['user'])){
-    $userName=$_SESSION['user'];
+                  echo "<table border='1' padding-top='50px'><tr><th>Picture</th><th>Title</th><th>Year</th></tr>";
 
-    try{
-      //$db = new pdo('mysql:host=35.229.81.68;port=3306;dbname=guestbook', 'test', 'test');
-      $db = new pdo('mysql:host=35.229.81.68:3306;dbname=guestbook',
-        'test',
-        'test'
-        );
-    }catch(PDOException $ex){
-        echo $ex->getMessage();
-    }
+                  foreach ($data as $row) {
+                      $movieTitle = str_replace("_", "" ,$row['movieTitle']);
+                      echo "<tr><td width='200' height='50'><img width='50' src=" . $row['movieImage'] . "></td><td width='200' height='50'>".$movieTitle."</td><td width='200' height='50'>".$row['movieYear']."</td></tr>";
+                  }
 
-    $stmt = $db->prepare("SELECT * from favorites, cache where favorites.userFavorite=cache.movieID and userName=?;");
-    $stmt->execute(array($userName));
-    $data = $stmt->fetchAll();
+                  echo "</table>";
+              }
+              else{
+                  echo "Please sign in to see your favorites";
+               }
 
-    echo "<table border='1' padding-top='50px'><tr><th>Picture</th><th>Title</th><th>Year</th></tr>";
 
-    foreach ($data as $row) {
-      $movieTitle = str_replace("_", "" ,$row['movieTitle']);
-      echo "<tr><td width='200' height='50'><img width='50' src=" . $row['movieImage'] . "></td><td width='200' height='50'>".$movieTitle."</td><td width='200' height='50'>".$row['movieYear']."</td></tr>";
-    }
+              ?>
 
-    echo "</table>";
-}
-else{
-    echo "Please sign in to see your favorites";
-}
 
-?>
-</section>
-<!--Footer-->
+          </div>
 
-<footer   height: 50px; margin-top: -50px;class="w3-container w3-padding-64 w3-center w3-blue w3-xlarge">
-<p> Team 2: My Movie List </p>
-</footer>
-</body>
+        <!-- Footer-->
+        <footer class="footer py-4">
+            <div class="container">
+                <div class="row align-items-center">
+                    <div class="col-lg-4 text-lg-start">Copyright &copy; My Movie List 2022</div>
+                    <div class="col-lg-4 my-3 my-lg-0">
+                        <a class="btn btn-dark btn-social mx-2" href="#!" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+                        <a class="btn btn-dark btn-social mx-2" href="#!" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+                        <a class="btn btn-dark btn-social mx-2" href="#!" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+                    </div>
+                    <div class="col-lg-4 text-lg-end">
+                        <a class="link-dark text-decoration-none me-3" href="#!">Privacy Policy</a>
+                        <a class="link-dark text-decoration-none" href="#!">Terms of Use</a>
+                    </div>
+                </div>
+            </div>
+        </footer>
+ <!-- Bootstrap core JS-->
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+        <!-- Core theme JS-->
+        <script src="js/scripts.js"></script>
+        <!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *-->
+        <!-- * *                               SB Forms JS                               * *-->
+        <!-- * * Activate your form at https://startbootstrap.com/solution/contact-forms * *-->
+        <!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *-->
+        <script src="https://cdn.startbootstrap.com/sb-forms-latest.js"></script>
+    </body>
 
 </html>

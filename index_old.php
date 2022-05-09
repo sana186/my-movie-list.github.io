@@ -6,8 +6,8 @@ $urlArray = parse_url($uri);
 $path = $urlArray['path'];
 
 switch ($path) {
-    case '/movies.php':
-        include 'movies.php';
+    case '/movie.php':
+        include 'movie.php';
         exit();
     case '/favorites.php':
         include 'favorites.php';
@@ -32,6 +32,7 @@ if(isset($_GET['user'])){
 }
 
 ?>
+<!DOCTYPE html>
 <html lang="en">
     <head>
         <meta charset="utf-8" />
@@ -48,7 +49,6 @@ if(isset($_GET['user'])){
         <link href="https://fonts.googleapis.com/css?family=Roboto+Slab:400,100,300,700" rel="stylesheet" type="text/css" />
         <!-- Core theme CSS (includes Bootstrap)-->
         <link href="css/styles.css" rel="stylesheet" />
-        <link href="css/stylesheet.css" rel="stylesheet" />
     </head>
     <body id="page-top">
         <!-- Navigation-->
@@ -56,13 +56,13 @@ if(isset($_GET['user'])){
             <div class="container">
                 <!--<a class="navbar-brand" href="#page-top"><img src="assets/img/navbar-logo.svg" alt="..." /></a>-->
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
-
+                    
                     <i class="fas fa-bars ms-1"></i>
                 </button>
                 <div class="collapse navbar-collapse" id="navbarResponsive">
                     <ul class="navbar-nav text-uppercase ms-auto py-4 py-lg-0">
                         <li class="nav-item"><a class="nav-link" href="index.php">Home</a></li>
-                        <li class="nav-item"><a class="nav-link" href="movies.php">Movies</a></li>
+                        <li class="nav-item"><a class="nav-link" href="movie.php">Movies</a></li>
                         <li class="nav-item"><a class="nav-link" href="signin.html">My Account</a></li>
                         <li class="nav-item"><a class="nav-link" href="favorites.php">My Favorites</a></li>
                         <li class="nav-item"><a class="nav-link" href="signout.php">Logout</a></li>
@@ -71,11 +71,11 @@ if(isset($_GET['user'])){
             </div>
         </nav>
         <!-- Masthead-->
-        <header class="masthead" style="padding-top:320px; background-image: url('images/header.jpg');">
+        <header class="masthead" style="background-image: url('images/header.jpg');">
             <div class="container">
                 <div class="masthead-heading text-uppercase">MY MOVIE LIST</div>
                 <div class="masthead-subheading">An all-in-one, cross-platform service for tracking the movies you’ve watched, enjoyed, and wish to know more about.</div>
-                <a class="btn btn-primary btn-xl text-uppercase" style="background-color:#212529;" href="#services">Tell Me More</a>
+                <a class="btn btn-primary btn-xl text-uppercase" href="#services">Tell Me More</a>
             </div>
         </header>
         <!-- Services-->
@@ -113,13 +113,6 @@ if(isset($_GET['user'])){
                 </div>
             </div>
         </section>
-        <?php
-
-if(isset($_GET['user'])){
-  $_SESSION['user']=$_GET['user'];
-}
-
-        ?>
         <!-- Portfolio Grid-->
         <section class="page-section bg-light" id="portfolio">
             <div class="container">
@@ -221,31 +214,6 @@ if(isset($_GET['user'])){
                 </div>
             </div>
         </section>
-<?php
-// Import top 100 trending movies from IMDb, then filtered to top 10
-// NOTE: API keys for IMDb allow 100 free requests per day - if maximum is reached, switch to another API key.
-// Josef - k_u83w1u0o
-// Connor - k_1nw7v1rh
-
-    $json_url = "https://imdb-api.com/en/API/MostPopularMovies/k_1nw7v1rh";
-    $json = file_get_contents($json_url);
-    $json=str_replace('}, ]',"}]",$json);
-    $data = json_decode($json, true);
-    $results = $data;
-    $limit = 0;
-
-    foreach($results['items'] as $result) {
-        if($limit < 10){
-            foreach ($result as $key => $value) {
-                if(($key == 'rank') or ($key == "title")){
-                    echo $key."-".$value."<br />";
-                }
-            }
-            echo "<br/>";
-            $limit++;
-        }
-    }
-?>
         <!-- About
         <section class="page-section" id="about">
             <div class="container">
@@ -391,7 +359,7 @@ if(isset($_GET['user'])){
                 </div>
             </div>
         </div>-->
-
+        
         <!-- Footer-->
         <footer class="footer py-4">
             <div class="container">
@@ -414,7 +382,7 @@ if(isset($_GET['user'])){
         <div class="portfolio-modal modal fade" id="portfolioModal1" tabindex="-1" role="dialog" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
-                    <div class="close-modal" data-bs-dismiss="modal"><img src="assets/img/close-icon.svg" alt="Close modal" /></div>
+                    <div class="close-modal" data-bs-dismiss="modal"><img src="images/close-icon.svg" alt="Close modal" /></div>
                     <div class="container">
                         <div class="row justify-content-center">
                             <div class="col-lg-8">
@@ -449,7 +417,7 @@ if(isset($_GET['user'])){
         <div class="portfolio-modal modal fade" id="portfolioModal2" tabindex="-1" role="dialog" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
-                    <div class="close-modal" data-bs-dismiss="modal"><img src="assets/img/close-icon.svg" alt="Close modal" /></div>
+                    <div class="close-modal" data-bs-dismiss="modal"><img src="images/close-icon.svg" alt="Close modal" /></div>
                     <div class="container">
                         <div class="row justify-content-center">
                             <div class="col-lg-8">
@@ -484,7 +452,7 @@ if(isset($_GET['user'])){
         <div class="portfolio-modal modal fade" id="portfolioModal3" tabindex="-1" role="dialog" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
-                    <div class="close-modal" data-bs-dismiss="modal"><img src="assets/img/close-icon.svg" alt="Close modal" /></div>
+                    <div class="close-modal" data-bs-dismiss="modal"><img src="images/close-icon.svg" alt="Close modal" /></div>
                     <div class="container">
                         <div class="row justify-content-center">
                             <div class="col-lg-8">
@@ -519,7 +487,7 @@ if(isset($_GET['user'])){
         <div class="portfolio-modal modal fade" id="portfolioModal4" tabindex="-1" role="dialog" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
-                    <div class="close-modal" data-bs-dismiss="modal"><img src="assets/img/close-icon.svg" alt="Close modal" /></div>
+                    <div class="close-modal" data-bs-dismiss="modal"><img src="images/close-icon.svg" alt="Close modal" /></div>
                     <div class="container">
                         <div class="row justify-content-center">
                             <div class="col-lg-8">
@@ -554,7 +522,7 @@ if(isset($_GET['user'])){
         <div class="portfolio-modal modal fade" id="portfolioModal5" tabindex="-1" role="dialog" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
-                    <div class="close-modal" data-bs-dismiss="modal"><img src="assets/img/close-icon.svg" alt="Close modal" /></div>
+                    <div class="close-modal" data-bs-dismiss="modal"><img src="images/close-icon.svg" alt="Close modal" /></div>
                     <div class="container">
                         <div class="row justify-content-center">
                             <div class="col-lg-8">
@@ -589,7 +557,7 @@ if(isset($_GET['user'])){
         <div class="portfolio-modal modal fade" id="portfolioModal6" tabindex="-1" role="dialog" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
-                    <div class="close-modal" data-bs-dismiss="modal"><img src="assets/img/close-icon.svg" alt="Close modal" /></div>
+                    <div class="close-modal" data-bs-dismiss="modal"><img src="images/close-icon.svg" alt="Close modal" /></div>
                     <div class="container">
                         <div class="row justify-content-center">
                             <div class="col-lg-8">
