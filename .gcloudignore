@@ -12,7 +12,11 @@
 # below:
 .git
 .gitignore
+<<<<<<< Updated upstream
 /google-cloud-sdk/
+=======
+/google-cloud-sdk
+>>>>>>> Stashed changes
 /.vs
 
 # PHP Composer dependencies:

@@ -6,6 +6,7 @@
 /composer.lock
 /composer.json
 /.vs
+<<<<<<< Updated upstream
 /google-cloud-sdk
 .vs/htdocs/v17/.suo
 .vs/htdocs/v17/workspaceFileList.bin
@@ -15,3 +16,7 @@
 .vs/slnx.sqlite
 .vs/VSWorkspaceState.json
 .vs/slnx.sqlite
+=======
+>>>>>>> Stashed changes
+cache.txt
+*.txt

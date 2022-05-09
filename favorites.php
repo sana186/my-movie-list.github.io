@@ -1,5 +1,25 @@
 <?php 
 session_start();
+require_once __DIR__ . '/vendor/autoload.php';
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+# [START use_cloud_storage_tools]
+use google\appengine\api\cloud_storage\CloudStorageTools;
+use Google\Cloud\Storage\StorageClient;
+# [END use_cloud_storage_tools]
+use Silex\Application;
+use Silex\Provider\TwigServiceProvider;
+use Symfony\Component\HttpFoundation\Request;
+
+// create the Silex application
+$app = new Application();
+$app->register(new TwigServiceProvider());
+$app['twig.path'] = [ __DIR__ ];
+
+
+?>
+<!DOCTYPE html>
 
 require_once __DIR__ . '/vendor/autoload.php';
 
