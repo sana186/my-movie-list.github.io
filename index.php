@@ -1,10 +1,5 @@
 <!DOCTYPE html>
 <?php
-session_start();
-if(isset($_GET['user'])){
-  $_SESSION['user']=$_GET['user'];
-}
-
 
 $uri = $_SERVER['REQUEST_URI'];
 $urlArray = parse_url($uri); 
@@ -27,7 +22,15 @@ switch ($path) {
       break;
   }
 
+  session_start();
+
+    if(isset($_GET['user'])){
+        $_SESSION['user']=$_GET['user'];
+    }
+
+    echo $_SESSION['user'];
 ?>
+
 <html lang="en">
     <head>
         <meta charset="utf-8" />
@@ -44,7 +47,6 @@ switch ($path) {
         <link href="https://fonts.googleapis.com/css?family=Roboto+Slab:400,100,300,700" rel="stylesheet" type="text/css" />
         <!-- Core theme CSS (includes Bootstrap)-->
         <link href="css/styles.css" rel="stylesheet" />
-        <?php session_start() ?>
     </head>
     <body id="page-top">
         <!-- Navigation-->
