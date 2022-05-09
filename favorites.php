@@ -1,9 +1,16 @@
-<?php 
+<?php
 session_start();
+
+
 require_once __DIR__ . '/vendor/autoload.php';
+
+use google\appengine\api\users\User;
+use google\appengine\api\users\UserService;
+
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
+
 # [START use_cloud_storage_tools]
 use google\appengine\api\cloud_storage\CloudStorageTools;
 use Google\Cloud\Storage\StorageClient;
@@ -17,6 +24,8 @@ $app = new Application();
 $app->register(new TwigServiceProvider());
 $app['twig.path'] = [ __DIR__ ];
 
+$storage = new StorageClient();
+$storage->registerStreamWrapper();
 
 ?>
 
