@@ -1,0 +1,181 @@
+* {
+  box-sizing: border-box;
+}
+
+/* Create two equal columns that floats next to each other */
+.column {
+  flex: 50%;
+  background-color: #f7f9fa;
+  padding-left: 50px;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.column2 {
+  flex: 50%;
+  height: 100vh;
+  min-height: 200px;
+  width:100%;
+  background-size:cover;
+  background-image: url("../assets/img/background.png");
+}
+
+/* Clear floats after the columns */
+.row:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+header.masthead2 {
+  padding-top: 5px;
+  padding-bottom: 5px;
+  text-align: center;
+  color: #000000;
+  background-image: url("../assets/img/map-image.png");
+  background-repeat: no-repeat;
+  background-attachment: scroll;
+  background-position: center center;
+  background-size: cover;
+  background-color: #f7f9fa;
+}
+header.masthead2 .masthead-subheading {
+  font-size: 1.5rem;
+  font-style: italic;
+  line-height: 1.5rem;
+  margin-bottom: 25px;
+  font-family: "Roboto Slab", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+}
+header.masthead2 .masthead-heading {
+  font-size: 3.25rem;
+  font-weight: 700;
+  line-height: 3.25rem;
+  margin-bottom: 2rem;
+  font-family: "Montserrat", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+}
+
+@media (min-width: 768px) {
+  header.masthead2 {
+    padding-top: 17rem;
+    padding-bottom: 12.5rem;
+  }
+  header.masthead2 .masthead-subheading {
+    font-size: 2.25rem;
+    font-style: italic;
+    line-height: 2.25rem;
+    margin-bottom: 2rem;
+  }
+  header.masthead2 .masthead-heading {
+    font-size: 4.5rem;
+    font-weight: 700;
+    line-height: 4.5rem;
+    margin-bottom: 4rem;
+  }
+}
+
+.accountContainer {
+  padding: 150px;
+  background-color:#f7f9fa;
+  text-align: center;
+}
+
+.movieContainer {
+  padding: 100px;
+  background-color:#f7f9fa;
+  text-align: center;
+}
+
+input[type=username], input[type=text], input[type=submit] {
+  padding: 15px;
+  margin: 5px 0 22px 0;
+  display: inline-block;
+  border: none;
+  background: white;
+}
+
+input[type=submit] {
+  width: 50%;
+}
+
+input[type=text] {
+  width: 40%;
+}
+
+input[type=username] {
+  width: 100%;
+}
+
+input[type=username]:focus, input[type=text]:focus, input[type=submit]:focus {
+  background-color: #ddd;
+  outline: none;
+}
+
+button {
+  color: white;
+  padding: 14px 20px;
+  margin: 8px 0;
+  border: none;
+  cursor: pointer;
+}
+
+.submitButton, .submitButton2 {
+  padding: 14px 20px;
+  background-color: #212529;
+}
+
+.submitButton:hover, .submitButton2:hover {
+  background-color: #ffc908;
+  transition: all .1s ease-out;
+}
+
+.submitButton button {
+  width: 50%;
+}
+
+.submitButton2 button {
+  width: 60%;
+}
+
+.tableContainer {
+  background-color:#f7f9fa;
+  padding-left: 150px;
+  padding-right:150px;
+}
+
+#mainNav{
+  background-color:#212529;
+}
+
+.headerContainer {
+  height: 30vh;
+  min-height: 300px;
+  background-size: cover;
+  background-image: url("../assets/img/background.png");
+  background-color: #212529;
+}
+
+#movies {
+  font-family: Arial, Helvetica, sans-serif;
+  border-collapse: collapse;
+  width: 75%;
+  text-align: center;
+}
+
+#movies td, #movies th {
+  border: 1px solid #ddd;
+  padding: 8px;
+}
+
+#movies tr:nth-child(even){background-color: white;}
+
+#movies tr:hover {background-color: #ddd;}
+
+#movies th {
+  padding-top: 12px;
+  padding-bottom: 12px;
+  text-align: center;
+  background-color: #212529;
+  color: white;
+}
