@@ -77,24 +77,26 @@
             </div>
         </nav>
 
-        <div class="row">
-          <div class="column">
-            <main>
-              <h2 style="font-size:50px;">CREATE AN ACCOUNT</h2><br/>
-              <form role="form" onsubmit="signUp(event);" autocomplete="off">
-                <div class="form-group">
-                  <input type="text" name="username" id="username" placeholder="Username" required>
-                </div>
-                <div class="form-group">
-                  <button class="submitButton2" type="submit">SUBMIT</button>
-                </div>
-              </form>
-              <p>Already a member? <a href="signin.html">Sign In</a></p>
-            </main>
-          </div>
-          <div class="column2"></div>
-        </div>
+        <header class="headerContainer"></header>
 
+        <div class="accountContainer">
+            <div class="row">
+              <div class="column">
+                <main>
+                  <h2 style="font-size:50px;">CREATE AN ACCOUNT</h2><br/>
+                  <form role="form" onsubmit="signUp(event);" autocomplete="off">
+                    <div class="form-group">
+                      <input type="text" name="username" id="username" placeholder="Username" required>
+                    </div>
+                    <div class="form-group">
+                      <button class="submitButton2" type="submit">SUBMIT</button>
+                    </div>
+                  </form>
+                  <p>Already a member? <a href="signin.html">Sign In</a></p>
+                </main>
+              </div>
+            </div>
+        </div>
         <!-- Footer-->
         <footer class="footer py-4">
             <div class="container">

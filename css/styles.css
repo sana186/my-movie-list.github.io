@@ -11406,11 +11406,11 @@ p {
   }
 }
 header.masthead {
-  padding-top: 10.5rem;
-  padding-bottom: 6rem;
+  padding-top: 6.5rem;
+  padding-bottom: 3rem;
   text-align: center;
   color: #000000;
-  background-image: url("../assets/img/header.jpg");
+  background-image: url("../imgages/header.jpg");
   background-repeat: no-repeat;
   background-attachment: scroll;
   background-position: center center;
@@ -11432,10 +11432,10 @@ header.masthead .masthead-heading {
 }
 
 @media (min-width: 768px) {
-  header.masthead {
-    padding-top: 17rem;
-    padding-bottom: 12.5rem;
-  }
+    header.masthead {
+        padding-top: 6.5rem;
+        padding-bottom: 3rem;
+    }
   header.masthead .masthead-subheading {
     font-size: 2.25rem;
     font-style: italic;

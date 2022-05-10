@@ -157,7 +157,7 @@ $storage->registerStreamWrapper();
                     $json = json_decode($json,true);
 
 
-                    if( isset($json['errorMessage'] ) ){
+                    if($json['errorMessage']!=""){
                         echo "Your search returned an error. Please refer to the message below: <br><br>";
                         echo "Error message: " . $json['errorMessage'] . "<br><br>";
                         echo "Please try at a later time or contact the site admin";
@@ -184,7 +184,7 @@ $storage->registerStreamWrapper();
                                             echo "<td width='200' height='100'>  " . "<img width='50' src=" . $json['results'][$i]['image'] . ">". "</td>";
                                             echo "<td width='200' height='100'>  " . $movieNameJSON . "</td>";
                                             echo "<td width='200' height='100'>  " . $yearJSON . "</td>";
-                                            echo "<td width='200' height='100'> <form method='post' action=''>  <input class='submitButton' type='submit' name='add' value='Add'>
+                                            echo "<td width='200' height='100'> <form method='post' action=''>  <input class='submitButton2' type='submit' name='add' value='Add'>
                                                                                     </td> <input type='hidden' id='movieName' name='movieName' value=" . str_replace(" ", "_" ,$movieNameJSON) . ">
                                                                                             <input type='hidden' id='movieDescription' name='movieDescription' value=" . $yearJSON . ">
                                                                                             <input type='hidden' id='movieImage' name='movieImage' value=" . $json['results'][$i]['image'] . ">

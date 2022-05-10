@@ -59,7 +59,7 @@ $storage->registerStreamWrapper();
                 <div class="collapse navbar-collapse" id="navbarResponsive">
                     <ul class="navbar-nav text-uppercase ms-auto py-4 py-lg-0">
                         <li class="nav-item"><a class="nav-link" href="index.php">Home</a></li>
-                        <li class="nav-item"><a class="nav-link" href="movie.php">Movies</a></li>
+                        <li class="nav-item"><a class="nav-link" href="movies.php">Movies</a></li>
                         <li class="nav-item"><a class="nav-link" href="signin.html">My Account</a></li>
                         <li class="nav-item"><a class="nav-link" href="favorites.php">My Favorites</a></li>
                         <li class="nav-item"><a class="nav-link" href="signout.php">Logout</a></li>
@@ -105,7 +105,7 @@ $storage->registerStreamWrapper();
                   echo "<table padding-top='50px' id='movies'><tr><th>Picture</th><th>Title</th><th>Year</th></tr>";
 
                   foreach ($data as $row) {
-                      $movieTitle = str_replace("_", "" ,$row['movieTitle']);
+                      $movieTitle = str_replace("_", " " ,$row['movieTitle']);
                       echo "<tr><td width='200' height='50'><img width='50' src=" . $row['movieImage'] . "></td><td width='200' height='50'>".$movieTitle."</td><td width='200' height='50'>".$row['movieYear']."</td></tr>";
                   }
 

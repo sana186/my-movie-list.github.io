@@ -19,7 +19,7 @@
   min-height: 200px;
   width:100%;
   background-size:cover;
-  background-image: url("../assets/img/background.png");
+  background-image: url("../images/background.png");
 }
 
 /* Clear floats after the columns */
@@ -34,7 +34,7 @@ header.masthead2 {
   padding-bottom: 5px;
   text-align: center;
   color: #000000;
-  background-image: url("../assets/img/map-image.png");
+  background-image: url("../images/map-image.png");
   background-repeat: no-repeat;
   background-attachment: scroll;
   background-position: center center;
@@ -57,10 +57,10 @@ header.masthead2 .masthead-heading {
 }
 
 @media (min-width: 768px) {
-  header.masthead2 {
-    padding-top: 17rem;
-    padding-bottom: 12.5rem;
-  }
+    header.masthead2 {
+        padding-top: 6.5rem;
+        padding-bottom: 3rem;
+    }
   header.masthead2 .masthead-subheading {
     font-size: 2.25rem;
     font-style: italic;
@@ -76,7 +76,7 @@ header.masthead2 .masthead-heading {
 }
 
 .accountContainer {
-  padding: 150px;
+  padding: 100px;
   background-color:#f7f9fa;
   text-align: center;
 }
@@ -87,12 +87,20 @@ header.masthead2 .masthead-heading {
   text-align: center;
 }
 
-input[type=username], input[type=text], input[type=submit] {
-  padding: 15px;
-  margin: 5px 0 22px 0;
-  display: inline-block;
-  border: none;
-  background: white;
+input[type=submit] {
+    padding: 15px;
+    margin: 5px 0 22px 0;
+    display: inline-block;
+    border: none;
+    background-color: white;
+}
+
+input[type=username], input[type=text] {
+    padding: 15px;
+    margin: 5px 0 22px 0;
+    display: inline-block;
+    border: none;
+    background-color: #ffc90a;
 }
 
 input[type=submit] {
@@ -108,8 +116,8 @@ input[type=username] {
 }
 
 input[type=username]:focus, input[type=text]:focus, input[type=submit]:focus {
-  background-color: #ddd;
-  outline: none;
+    background-color: #ffc90a;
+    outline: none;
 }
 
 button {
@@ -149,10 +157,9 @@ button {
 }
 
 .headerContainer {
-  height: 30vh;
-  min-height: 300px;
+  min-height: 150px;
   background-size: cover;
-  background-image: url("../assets/img/background.png");
+  background-image: url("../images/background.png");
   background-color: #212529;
 }
 

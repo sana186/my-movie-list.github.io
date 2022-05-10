@@ -71,7 +71,7 @@ if(isset($_GET['user'])){
             </div>
         </nav>
         <!-- Masthead-->
-        <header class="masthead" style="padding-top:320px; background-image: url('images/header.jpg');">
+        <header class="masthead" style="padding-top:150px; background-image: url('images/header.jpg');">
             <div class="container">
                 <div class="masthead-heading text-uppercase">MY MOVIE LIST</div>
                 <div class="masthead-subheading">An all-in-one, cross-platform service for tracking the movies you’ve watched, enjoyed, and wish to know more about.</div>
