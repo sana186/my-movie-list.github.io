@@ -158,42 +158,50 @@ $storage->registerStreamWrapper();
 
                     $searchString = str_replace(" ", "%20" ,$_POST["search"]);
                     $json=file_get_contents("https://imdb-api.com/en/API/SearchTitle/k_u83w1u0o/" . $searchString . "");
+                    
                     $json = json_decode($json,true);
-                    $i = 0;
-
-                ?>
 
 
-                <table border='1' padding-top='50px'>
-                    <tr>
-                        <th>Picture</th>
-                        <th>Title</th>
-                        <th>Year</th>
-                        <th>Add to favorites</th>
-                    </tr>
-
-                    <?php
-                    while ($i < count($json)){
-                        if ($i === 0 || ($i % 2 == 0)){
-                            $yearJSON = (int) filter_var($json['results'][$i]['description'], FILTER_SANITIZE_NUMBER_INT);
-                            $movieNameJSON = $json['results'][$i]['title'];
-                            echo "<tr>";
-                            echo "<td width='200' height='100'>  " . "<img width='50' src=" . $json['results'][$i]['image'] . ">". "</td>";
-                            echo "<td width='200' height='100'>  " . $movieNameJSON . "</td>";
-                            echo "<td width='200' height='100'>  " . $yearJSON . "</td>";
-                            echo "<td width='200' height='100'> <form method='post' action=''>  <input type='submit' name='add' value='add'>
-                                                                      </td> <input type='hidden' id='movieName' name='movieName' value=" . str_replace(" ", "_" ,$movieNameJSON) . ">
-                                                                            <input type='hidden' id='movieDescription' name='movieDescription' value=" . $yearJSON . ">
-                                                                            <input type='hidden' id='movieImage' name='movieImage' value=" . $json['results'][$i]['image'] . ">
-                                                                            <input type='hidden' id='addMovie' name='addMovie' value=" . $json['results'][$i]['id'] . "></form></td>";
-                            echo "<tr>";
-                        }
-                        $i++;
+                    if( isset($json['errorMessage'] ) ){
+                        echo "Your search returned an error. Please refer to the message below: <br><br>";
+                        echo "Error message: " . $json['errorMessage'] . "<br><br>";
+                        echo "Please try at a later time or contact the site admin";
                     }
-                 ?>
-                </table>
+                    else{
 
-                <?php
+                        $i = 0;
+
+                        ?>
+                            <table border='1' padding-top='50px'>
+                                <tr>
+                                    <th>Picture</th>
+                                    <th>Title</th>
+                                    <th>Year</th>
+                                    <th>Add to favorites</th>
+                                </tr>
+
+                                <?php
+                                    while ($i < count($json)){
+                                        if ($i === 0 || ($i % 2 == 0)){
+                                            $yearJSON = (int) filter_var($json['results'][$i]['description'], FILTER_SANITIZE_NUMBER_INT);
+                                            $movieNameJSON = $json['results'][$i]['title'];
+                                            echo "<tr>";
+                                            echo "<td width='200' height='100'>  " . "<img width='50' src=" . $json['results'][$i]['image'] . ">". "</td>";
+                                            echo "<td width='200' height='100'>  " . $movieNameJSON . "</td>";
+                                            echo "<td width='200' height='100'>  " . $yearJSON . "</td>";
+                                            echo "<td width='200' height='100'> <form method='post' action=''>  <input type='submit' name='add' value='add'>
+                                                                                    </td> <input type='hidden' id='movieName' name='movieName' value=" . str_replace(" ", "_" ,$movieNameJSON) . ">
+                                                                                            <input type='hidden' id='movieDescription' name='movieDescription' value=" . $yearJSON . ">
+                                                                                            <input type='hidden' id='movieImage' name='movieImage' value=" . $json['results'][$i]['image'] . ">
+                                                                                            <input type='hidden' id='addMovie' name='addMovie' value=" . $json['results'][$i]['id'] . "></form></td>";
+                                            echo "<tr>";
+                                        }
+                                        $i++;
+                                    }
+                                ?>
+                            </table>
+                        <?php
+                    }
                 }
                 ?>
           </div>
